@@ -19,7 +19,6 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@id/btnUpdate">
-
         <!-- TextView para la temperatura -->
         <TextView
             android:id="@+id/textViewTemp"
@@ -45,6 +44,14 @@
             android:layout_weight="1"
             android:layout_marginEnd="16dp"
             android:layout_marginTop="16dp"/>
+        <!-- Botón para ver en Google Maps -->
+        <Button
+            android:id="@+id/btnVerEnGMaps"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ver_en_gmaps"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp" />
 
     </LinearLayout>
 

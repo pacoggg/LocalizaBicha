@@ -9,7 +9,6 @@ import com.android.volley.toolbox.Volley
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
-
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
@@ -18,7 +17,9 @@ import android.widget.TextView
 import com.google.android.gms.maps.model.Marker
 //import kotlinx.android.synthetic.main.activity_main.*
 import org.json.JSONObject
-
+// Importa la clase Intent
+import android.content.Intent
+import android.net.Uri
 @Suppress("NAME_SHADOWING")
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -65,6 +66,28 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 Toast.makeText(this, "Error al obtener los datos del vehículo: ${error.message}", Toast.LENGTH_LONG).show()
             }
         )
+        // Obtén una referencia al botón "Ver en GMaps"
+        val btnVerEnGMaps = findViewById<Button>(R.id.btnVerEnGMaps)
+
+// Agrega un listener de clic al botón "Ver en GMaps"
+        btnVerEnGMaps.setOnClickListener {
+            // Crea un Intent con la acción ACTION_VIEW y la URI para abrir Google Maps con un marcador en las coordenadas
+            //val lat = 37.7749 // Latitud de la ubicación deseada
+            //val lng = -122.4194 // Longitud de la ubicación deseada
+            val zoomLevel = 15 // Nivel de zoom en Google Maps
+            val gmmIntentUri = Uri.parse("geo:$lat,$lng?z=$zoomLevel&q=$lat,$lng")
+            val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+            mapIntent.setPackage("com.google.android.apps.maps")
+
+            // Comprueba si hay una aplicación de Google Maps instalada en el dispositivo
+            if (mapIntent.resolveActivity(packageManager) != null) {
+                // Si hay una aplicación de Google Maps instalada, abre Google Maps con un marcador en la ubicación deseada
+                startActivity(mapIntent)
+            } else {
+                // Si no hay una aplicación de Google Maps instalada, muestra un mensaje de error
+                Toast.makeText(this, "No se encontró la aplicación de Google Maps", Toast.LENGTH_SHORT).show()
+            }
+        }
         val btnUpdate = findViewById<Button>(R.id.btnUpdate)
         btnUpdate.setOnClickListener {
             // Eliminar el Marker anterior si existe
