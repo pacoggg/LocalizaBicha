@@ -9,12 +9,17 @@ import com.android.volley.toolbox.Volley
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
+
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import android.widget.Button
+import android.widget.TextView
 import com.google.android.gms.maps.model.Marker
+//import kotlinx.android.synthetic.main.activity_main.*
+import org.json.JSONObject
 
+@Suppress("NAME_SHADOWING")
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
@@ -29,6 +34,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         // Obtener el SupportMapFragment y notificar cuando el mapa esté listo para ser utilizado.
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+        // Obtener los TextView para la temperatura y la velocidad
+        val textViewTemp = findViewById<TextView>(R.id.textViewTemp)
+        val textViewVel = findViewById<TextView>(R.id.textViewVel)
 
         // Llamada a ThingSpeak API para obtener los datos del vehículo más recientes
         val url = "https://api.thingspeak.com/channels/2090424/feeds.json?api_key=GIO7NQE7IRAEC42W&results=1"
@@ -41,7 +49,12 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 val feedObj = feedArray.getJSONObject(0)
                 lat = feedObj.getString("field1").toDouble()
                 lng = feedObj.getString("field2").toDouble()
-
+                // Obtener la temperatura y la velocidad del JSON
+                val temperatura = feedObj.getDouble("field3")
+                val velocidad = feedObj.getDouble("field5")
+                // Establecer la temperatura y la velocidad en los TextView
+                textViewTemp.text = "$temperatura ºC"
+                textViewVel.text = "$velocidad Km/h"
                 // Actualizar la posición del vehículo en el mapa
                 val latLng = LatLng(lat, lng)
                 mMap.clear()
@@ -68,7 +81,12 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                     val feedArray = response.getJSONArray("feeds")
                     val feedObj = feedArray.getJSONObject(0)
                     lat = feedObj.getString("field1").toDouble()
-                    lng = feedObj.getString("field2").toDouble()
+                    lng = feedObj.getString("field2").toDouble()// Obtener la temperatura y la velocidad del JSON
+                    val temperatura = feedObj.getDouble("field3")
+                    val velocidad = feedObj.getDouble("field5")
+                    // Establecer la temperatura y la velocidad en los TextView
+                    textViewTemp.text = "$temperatura ºC"
+                    textViewVel.text = "$velocidad Km/h"
                     actualizarPosicionEnMapa(lat, lng)
                 },
                 { error ->
