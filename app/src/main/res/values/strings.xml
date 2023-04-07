@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">LocalizaBicha</string>
+    <string name="temp">Temp:</string>
+    <string name="vel">Vel:</string>
+    <string name="actualizar">Actualizar</string>
 </resources>
